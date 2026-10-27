@@ -1,0 +1,9 @@
+{
+  "name": "arc-boosts-to-userscript",
+  "version": "1.0.0",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "test": "node --test --test-concurrency=1 convert.test.js"
+  }
+}

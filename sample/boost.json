@@ -1,0 +1,6 @@
+{
+  "name": "Calm news",
+  "domain": "news.ycombinator.com",
+  "css": "body { background: #fdf6e3 !important; }\n.votearrow { display: none; }\n",
+  "js": "document.querySelectorAll('.hnuser').forEach((a) => (a.style.fontWeight = 'bold'));\n"
+}
