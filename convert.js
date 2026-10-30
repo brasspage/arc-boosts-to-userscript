@@ -53,6 +53,12 @@ function userscript(boost) {
     '    const s = document.createElement("style");',
     "    s.textContent = css;",
     "    (document.head || document.documentElement).appendChild(s);",
+    "    // A strict CSP blocks the style element (real-browser test, Oct 30). This route is not blocked.",
+    "    if (!s.sheet) {",
+    "      const sheet = new CSSStyleSheet();",
+    "      sheet.replaceSync(css);",
+    "      document.adoptedStyleSheets = [...document.adoptedStyleSheets, sheet];",
+    "    }",
     "  }",
     "  const run = () => {",
     b.js

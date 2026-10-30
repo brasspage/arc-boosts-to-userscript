@@ -23,7 +23,7 @@ test("userscript: header, @match lines, CSS and JS both applied on a fake page",
   const document = {
     readyState: "complete",
     head: { appendChild: (n) => added.push(n) },
-    createElement: (tag) => ({ tag }),
+    createElement: (tag) => ({ tag, sheet: {} }),
     querySelectorAll: (q) => (q === ".hnuser" ? users : []),
   };
   vm.runInNewContext(u, { document });
@@ -34,6 +34,25 @@ test("userscript: header, @match lines, CSS and JS both applied on a fake page",
     users.map((x) => x.style.fontWeight),
     ["bold", "bold"],
   );
+});
+
+test("userscript: when a CSP blocks the style element, the CSS goes in as an adopted sheet", () => {
+  const replaced = [];
+  class CSSStyleSheet {
+    replaceSync(css) {
+      replaced.push(css);
+    }
+  }
+  const document = {
+    readyState: "complete",
+    adoptedStyleSheets: [],
+    head: { appendChild: () => {} },
+    createElement: () => ({ sheet: null }),
+    querySelectorAll: () => [],
+  };
+  vm.runInNewContext(userscript(sample), { document, CSSStyleSheet });
+  assert.deepStrictEqual(replaced, [sample.css]);
+  assert.strictEqual(document.adoptedStyleSheets.length, 1);
 });
 
 test("extension: valid MV3 manifest, same matches, files the manifest names exist", () => {
